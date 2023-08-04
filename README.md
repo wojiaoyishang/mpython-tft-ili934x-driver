@@ -45,7 +45,7 @@
 |SDI(MOSI)|P20(SDA)|
 |SCK|P13|
 |LED|P8|
-|SDO(MISO)|P19(SCL)|
+|SDO(MISO)非必须|P19(SCL)|
 
 连接好后，下载仓库里面对应的代码文件 `ili934xnew.py` 为模块，使用下面的代码激活TFT屏幕。
 
@@ -57,7 +57,7 @@ tft = ILI9341()
 实际上，原代码是这样的：
 
 ```python
-spi = SPI(2, baudrate=20000000, miso=Pin(Pin.P19), mosi=Pin(Pin.P20), sck=Pin(Pin.P13))
+spi = SPI(2, baudrate=20000000, mosi=Pin(Pin.P20), sck=Pin(Pin.P13))
 tft = ILI9341(spi, cs=Pin(Pin.P16), dc=Pin(Pin.P14), rst=Pin(Pin.P15), led=Pin(Pin.P12), w=320, h=240, r=0)
 # 注：led是用来电亮TFT屏幕的，w是屏幕的宽度，h是屏幕的高度，r是旋转角度，r=90就是选择90度。
 ```
