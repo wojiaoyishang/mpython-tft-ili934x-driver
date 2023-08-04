@@ -1,5 +1,11 @@
 # mpython 掌控板 ili934x tft 屏幕驱动
 
+#### 其它项目
+
+[mpython-oled屏幕显示图片](https://gitee.com/wojiaoyishang/new-mpython-bin-to-picture)
+
+[mpython-操作系统](https://gitee.com/wojiaoyishang/TaoLiSystem)
+
 #### 介绍
 为掌控板定制的 mpython ili934x tft 屏幕驱动，代码逻辑遵循 mpython 的 oled 屏。
 
