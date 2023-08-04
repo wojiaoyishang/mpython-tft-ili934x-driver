@@ -36,10 +36,10 @@
 |CS|P16|
 |RESET|P15|
 |DC|P14|
-|SDI(MOSI)|P20|
+|SDI(MOSI)|P20(SDA)|
 |SCK|P13|
 |LED|P8|
-|SDO(MISO)|P19|
+|SDO(MISO)|P19(SCL)|
 
 连接好后，下载仓库里面对应的代码文件 `ili934xnew.py` 为模块，使用下面的代码激活TFT屏幕。
 
