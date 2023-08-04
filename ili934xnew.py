@@ -325,7 +325,7 @@ class ILI9341:
                     i = i + 1
         return str_w, fb
 
-    def DispChar(self, s, x, y, color=65535):
+    def DispChar(self, s, x, y, color=65535, auto_return=False):
         for c in s:
             w, fb = self._DispChar(c, color)
             self.blit(fb, x, y, w, oled.f.height, rgb565=True)
@@ -360,3 +360,4 @@ class ILI9341:
                 line_count = 0
             
             
+
