@@ -1,4 +1,4 @@
-# mpython 掌控板 ili934x tft 屏幕驱动
+# mpython 掌控板 ili934x / xpt2046 TFT 屏幕驱动
 
 #### 其它项目
 
@@ -7,7 +7,8 @@
 [mpython-操作系统](https://gitee.com/wojiaoyishang/TaoLiSystem)
 
 #### 介绍
-为掌控板定制的 mpython ili934x tft 屏幕驱动，代码逻辑遵循 mpython 的 oled 屏。
+
+为掌控板定制的 mpython ili934 显示 / xpt2046 触摸 TFT 屏幕驱动，代码逻辑遵循 mpython 的 oled 屏。
 
 驱动源码参考至 [https://github.com/jeffmer/micropython-ili9341](https://github.com/jeffmer/micropython-ili9341) 。并依照 [mpython 掌控板文档](https://mpython.readthedocs.io/zh/master/tutorials/basics/oled.html) 修改了源码，支持调用掌控板自带的字体，也允许使用自定义的字体。
 
@@ -44,7 +45,7 @@
 |DC|P14|
 |SDI(MOSI)|P20(SDA)|
 |SCK|P13|
-|LED|P8|
+|LED非必须|P8|
 |SDO(MISO)非必须|P19(SCL)|
 
 连接好后，下载仓库里面对应的代码文件 `ili934xnew.py` 为模块，使用下面的代码激活TFT屏幕。
@@ -59,7 +60,7 @@ tft = ILI9341()
 ```python
 spi = SPI(2, baudrate=20000000, mosi=Pin(Pin.P20), sck=Pin(Pin.P13))
 tft = ILI9341(spi, cs=Pin(Pin.P16), dc=Pin(Pin.P14), rst=Pin(Pin.P15), led=Pin(Pin.P12), w=320, h=240, r=0)
-# 注：led是用来电亮TFT屏幕的，w是屏幕的宽度，h是屏幕的高度，r是旋转角度，r=90就是选择90度。
+# 注：led是用来电亮TFT屏幕的，w是屏幕的宽度，h是屏幕的高度，r是旋转角度，r=1是90度。
 ```
 
 如果你想采用其它的引脚来与TFT屏幕交互，你可以在原代码的基础上稍作修改。
@@ -118,3 +119,36 @@ with open("1.bmp", "rb") as file_handle:
 
 ![输入图片说明](https://foruda.gitee.com/images/1691152883284359035/8515c01d_5210553.png "屏幕截图")
 
+### 触摸
+
+**使用触摸时，因为掌控板接口不足，使用我们要舍弃 LED 接口，这意味着不能使用 `tft.power()` 方法开启或关闭显示屏，所以您可以将LED引脚的线直接接到VCC接口上，当然**
+
+安装如下方式连线：
+|TFT屏幕触摸引脚|掌控板引脚|
+|:----:|:----:|
+|T_CLK|P0|
+|T_CS|P9|
+|T_DIN|P8|
+|T_DO|P1|
+|T_IRQ|P2|
+
+下载仓库中的 `xpt2046.py` 并写如下代码：
+
+```python
+from ili934xnew import ILI9341, color565
+from xpt2046 import Touch
+
+def touchscreen_press(x, y):
+    print(x,y)
+
+spi = SPI(1, baudrate=20000000, mosi=Pin(Pin.P20), sck=Pin(Pin.P13))
+tft = ILI9341(spi, cs=Pin(Pin.P16), dc=Pin(Pin.P14), rst=Pin(Pin.P15), led=None, w=320, h=240, r=0)
+tft.fill(0)
+tft.DispChar("测试，皮卡丘皮卡丘皮卡丘！！！", 0, 0, 63488, auto_return=True)
+spi = SPI(2, baudrate=1000000, sck=Pin(Pin.P0), mosi=Pin(Pin.P8), miso=Pin(Pin.P1))
+tft_touch = Touch(spi, cs=Pin(Pin.P9), int_pin=Pin(Pin.P2), int_handler=touchscreen_press, r=0)
+```
+
+***注意：输出的xy坐标不会完全和显示坐标同一，需要手动在touchscreen_press()处理与调整。***
+
+触摸参考：[https://github.com/rdagger/micropython-ili9341/blob/master/xpt2046.py](https://github.com/rdagger/micropython-ili9341/blob/master/xpt2046.py)
