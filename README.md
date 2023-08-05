@@ -139,7 +139,7 @@ from ili934xnew import ILI9341, color565
 from xpt2046 import Touch
 
 def touchscreen_press(x, y):
-    print(x,y)
+    print(x-5,y+10)  # 这样才有不错的效果
 
 spi = SPI(1, baudrate=20000000, mosi=Pin(Pin.P20), sck=Pin(Pin.P13))
 tft = ILI9341(spi, cs=Pin(Pin.P16), dc=Pin(Pin.P14), rst=Pin(Pin.P15), led=None, w=320, h=240, r=0)
