@@ -127,8 +127,8 @@ with open("1.bmp", "rb") as file_handle:
 |TFT屏幕触摸引脚|掌控板引脚|
 |:----:|:----:|
 |T_CLK|P0|
-|T_CS|P9|
-|T_DIN|P8|
+|T_CS|P9(或P11需要修改代码)|
+|T_DIN|P8(或P5需要修改代码)|
 |T_DO|P1|
 |T_IRQ|P2|
 
