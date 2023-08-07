@@ -64,7 +64,8 @@ tft = ILI9341(spi, cs=Pin(Pin.P16), dc=Pin(Pin.P14), rst=Pin(Pin.P15), led=Pin(P
 
 ```python
 from ili934xnew import ILI9341, color565
-tft = ILI9341()
+spi = SPI(2, baudrate=20000000, mosi=Pin(Pin.P20), sck=Pin(Pin.P13))
+tft = ILI9341(spi, cs=Pin(Pin.P16), dc=Pin(Pin.P14), rst=Pin(Pin.P15), led=Pin(Pin.P8, Pin.OUT), w=320, h=240, r=0)
 tft.poweron()  # 默认不开启屏幕，需要手动打开，如果没有连LED不用这句话
 tft.fill(0)
 tft.DispChar("测试，皮卡丘皮卡丘皮卡丘！！！\nHere some interesting for you.\n" + "长文本" * 100, 0, 0, color565(255, 255, 255), buffer_char_line=1, buffer_width=None)  # buffer_char_line 参数为缓存多少行文字，buffer_width 参数为文字显示区域的宽度，默认为屏幕宽度，会自动换行。
@@ -105,7 +106,8 @@ tft.blit(fbuf, 20, 40, 50, 50, True)  # 把framebuf贴在屏幕 (20, 40) 的位�
 import framebuf
 import bmp_file_reader as bmpr
 from ili934xnew import ILI9341, color565
-tft = ILI9341()
+spi = SPI(2, baudrate=20000000, mosi=Pin(Pin.P20), sck=Pin(Pin.P13))
+tft = ILI9341(spi, cs=Pin(Pin.P16), dc=Pin(Pin.P14), rst=Pin(Pin.P15), led=Pin(Pin.P8, Pin.OUT), w=320, h=240, r=0)
 tft.poweron()
 tft.fill(0)
 with open("1.bmp", "rb") as file_handle:
@@ -138,12 +140,12 @@ from xpt2046 import Touch
 def touchscreen_press(x, y):
     print(x-5,y+10)  # 这样才有不错的效果
 
-spi = SPI(1, baudrate=20000000, mosi=Pin(Pin.P20), sck=Pin(Pin.P13))
-tft = ILI9341(spi, cs=Pin(Pin.P16), dc=Pin(Pin.P14), rst=Pin(Pin.P15), led=None, w=320, h=240, r=0)
+spi1 = SPI(1, baudrate=20000000, mosi=Pin(Pin.P20), sck=Pin(Pin.P13))
+tft = ILI9341(spi1, cs=Pin(Pin.P16), dc=Pin(Pin.P14), rst=Pin(Pin.P15), led=None, w=320, h=240, r=0)
 tft.fill(0)
 tft.DispChar("测试，皮卡丘皮卡丘皮卡丘！！！", 0, 0, 63488)
-spi = SPI(2, baudrate=1000000, sck=Pin(Pin.P0), mosi=Pin(Pin.P8), miso=Pin(Pin.P1))
-tft_touch = Touch(spi, cs=Pin(Pin.P9), int_pin=Pin(Pin.P2), int_handler=touchscreen_press, r=0)
+spi2 = SPI(2, baudrate=1000000, sck=Pin(Pin.P0), mosi=Pin(Pin.P8), miso=Pin(Pin.P1))
+tft_touch = Touch(spi2, cs=Pin(Pin.P9), int_pin=Pin(Pin.P2), int_handler=touchscreen_press, r=0)
 ```
 
 掌中宝的代码参考，连接 P11 与 P6：
