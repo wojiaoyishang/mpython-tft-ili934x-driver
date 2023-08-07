@@ -45,7 +45,7 @@
 |DC|P14|
 |SDI(MOSI)|P20(SDA)|
 |SCK|P13|
-|LED非必须|P8(没有使用P7代替，要传入led=Pin(Pin.P7, Pin.OUT))|
+|LED非必须|P8(没有使用P7代替或直接接VCC，要传入led=Pin(Pin.P7, Pin.OUT))|
 |SDO(MISO)非必须|P19(SCL)|
 
 连接好后，下载仓库里面对应的代码文件 `ili934xnew.py` 为模块，使用下面的代码激活TFT屏幕。
@@ -65,7 +65,7 @@ tft = ILI9341(spi, cs=Pin(Pin.P16), dc=Pin(Pin.P14), rst=Pin(Pin.P15), led=Pin(P
 ```python
 from ili934xnew import ILI9341, color565
 tft = ILI9341()
-tft.poweron()  # 默认不开启屏幕，需要手动打开
+tft.poweron()  # 默认不开启屏幕，需要手动打开，如果没有连LED不用这句话
 tft.fill(0)
 tft.DispChar("测试，皮卡丘皮卡丘皮卡丘！！！\nHere some interesting for you.\n" + "长文本" * 100, 0, 0, color565(255, 255, 255), buffer_char_line=1, buffer_width=None)  # buffer_char_line 参数为缓存多少行文字，buffer_width 参数为文字显示区域的宽度，默认为屏幕宽度，会自动换行。
 
@@ -122,12 +122,12 @@ with open("1.bmp", "rb") as file_handle:
 |TFT屏幕触摸引脚|掌控板引脚|
 |:----:|:----:|
 |T_CLK|P0|
-|T_CS|P9(或P11需要修改代码)|
-|T_DIN|P8(或P6需要修改代码)|
+|T_CS|P9(或P11)|
+|T_DIN|P8(或P6)|
 |T_DO|P1|
 |T_IRQ|P2|
 
-下载仓库中的 `xpt2046.py` 并写如下代码：
+下载仓库中的 `xpt2046.py` 并写如下代码（连 P9 和 P8）：
 
 ```python
 from machine import SPI
@@ -144,6 +144,13 @@ tft.fill(0)
 tft.DispChar("测试，皮卡丘皮卡丘皮卡丘！！！", 0, 0, 63488)
 spi = SPI(2, baudrate=1000000, sck=Pin(Pin.P0), mosi=Pin(Pin.P8), miso=Pin(Pin.P1))
 tft_touch = Touch(spi, cs=Pin(Pin.P9), int_pin=Pin(Pin.P2), int_handler=touchscreen_press, r=0)
+```
+
+掌中宝的代码参考，连接 P11 与 P6：
+
+```python
+spi = SPI(2, baudrate=1000000, sck=Pin(Pin.P0), mosi=Pin(Pin.P6), miso=Pin(Pin.P1))
+tft_touch = Touch(spi, cs=Pin(Pin.P11), int_pin=Pin(Pin.P2), int_handler=touchscreen_press, r=0)
 ```
 
 ***注意：输出的xy坐标不会完全和显示坐标同一，需要手动在touchscreen_press()处理与调整。***
