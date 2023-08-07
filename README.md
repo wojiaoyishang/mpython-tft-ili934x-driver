@@ -74,7 +74,7 @@ from ili934xnew import ILI9341, color565
 tft = ILI9341()
 tft.poweron()  # 默认不开启屏幕，需要手动打开
 tft.fill(0)
-tft.DispChar("测试，皮卡丘皮卡丘皮卡丘！！！\nHere some interesting for you.\n" + "长文本" * 100, 0, 0, color565(255, 255, 255), auto_return=True)
+tft.DispChar("测试，皮卡丘皮卡丘皮卡丘！！！\nHere some interesting for you.\n" + "长文本" * 100, 0, 0, color565(255, 255, 255), buffer_char_line=1, buffer_width=None)  # buffer_char_line 参数为缓存多少行文字，buffer_width 参数为文字显示区域的宽度，默认为屏幕宽度，会自动换行。
 
 tft.deinit()  # 最后释放，不然软重启会白屏
 ```
