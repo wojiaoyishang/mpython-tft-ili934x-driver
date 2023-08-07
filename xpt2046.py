@@ -57,7 +57,9 @@ class Touch(object):
             self.int_locked = False
             int_pin.irq(trigger=int_pin.IRQ_FALLING | int_pin.IRQ_RISING,
                         handler=self.int_press)
-
+    def deinit(self):
+        self.spi.deinit()
+        
     def get_touch(self):
         """Take multiple samples to get accurate touch reading."""
         timeout = 2  # set timeout to 2 seconds
@@ -156,3 +158,4 @@ class Touch(object):
         self.cs(1)
 
         return (self.rx_buf[1] << 4) | (self.rx_buf[2] >> 4)
+
