@@ -51,13 +51,6 @@
 连接好后，下载仓库里面对应的代码文件 `ili934xnew.py` 为模块，使用下面的代码激活TFT屏幕。
 
 ```python
-from ili934xnew import ILI9341, color565
-tft = ILI9341()
-```
-
-实际上，原代码是这样的：
-
-```python
 spi = SPI(2, baudrate=20000000, mosi=Pin(Pin.P20), sck=Pin(Pin.P13))
 tft = ILI9341(spi, cs=Pin(Pin.P16), dc=Pin(Pin.P14), rst=Pin(Pin.P15), led=Pin(Pin.P8, Pin.OUT), w=320, h=240, r=0)
 # 注：led是用来电亮TFT屏幕的，w是屏幕的宽度，h是屏幕的高度，r是旋转角度，r=1是90度。
@@ -137,6 +130,8 @@ with open("1.bmp", "rb") as file_handle:
 下载仓库中的 `xpt2046.py` 并写如下代码：
 
 ```python
+from machine import SPI
+
 from ili934xnew import ILI9341, color565
 from xpt2046 import Touch
 
@@ -146,7 +141,7 @@ def touchscreen_press(x, y):
 spi = SPI(1, baudrate=20000000, mosi=Pin(Pin.P20), sck=Pin(Pin.P13))
 tft = ILI9341(spi, cs=Pin(Pin.P16), dc=Pin(Pin.P14), rst=Pin(Pin.P15), led=None, w=320, h=240, r=0)
 tft.fill(0)
-tft.DispChar("测试，皮卡丘皮卡丘皮卡丘！！！", 0, 0, 63488, auto_return=True)
+tft.DispChar("测试，皮卡丘皮卡丘皮卡丘！！！", 0, 0, 63488)
 spi = SPI(2, baudrate=1000000, sck=Pin(Pin.P0), mosi=Pin(Pin.P8), miso=Pin(Pin.P1))
 tft_touch = Touch(spi, cs=Pin(Pin.P9), int_pin=Pin(Pin.P2), int_handler=touchscreen_press, r=0)
 ```
