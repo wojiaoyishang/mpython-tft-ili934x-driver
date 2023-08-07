@@ -75,6 +75,8 @@ tft = ILI9341()
 tft.poweron()  # 默认不开启屏幕，需要手动打开
 tft.fill(0)
 tft.DispChar("测试，皮卡丘皮卡丘皮卡丘！！！\nHere some interesting for you.\n" + "长文本" * 100, 0, 0, color565(255, 255, 255), auto_return=True)
+
+tft.deinit()  # 最后释放，不然软重启会白屏
 ```
 
 ***因为掌控板运存比较小，所以对于屏幕比较大的TFT屏幕没有全屏幕缓存区操作，所以此驱动没有 `tft.show()` 方法。DispChar()方法是单字刷新。***
@@ -128,7 +130,7 @@ with open("1.bmp", "rb") as file_handle:
 |:----:|:----:|
 |T_CLK|P0|
 |T_CS|P9(或P11需要修改代码)|
-|T_DIN|P8(或P5需要修改代码)|
+|T_DIN|P8(或P6需要修改代码)|
 |T_DO|P1|
 |T_IRQ|P2|
 
