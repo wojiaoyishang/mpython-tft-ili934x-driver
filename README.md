@@ -51,6 +51,8 @@
 连接好后，下载仓库里面对应的代码文件 `ili934xnew.py` 为模块，使用下面的代码激活TFT屏幕。
 
 ```python
+from machine import SPI
+
 spi = SPI(2, baudrate=20000000, mosi=Pin(Pin.P20), sck=Pin(Pin.P13))
 tft = ILI9341(spi, cs=Pin(Pin.P16), dc=Pin(Pin.P14), rst=Pin(Pin.P15), led=Pin(Pin.P8, Pin.OUT), w=320, h=240, r=0)
 # 注：led是用来电亮TFT屏幕的，w是屏幕的宽度，h是屏幕的高度，r是旋转角度，r=1是90度。
@@ -63,7 +65,9 @@ tft = ILI9341(spi, cs=Pin(Pin.P16), dc=Pin(Pin.P14), rst=Pin(Pin.P15), led=Pin(P
 显示掌控板自带的字库可以使用如下代码：
 
 ```python
+from machine import SPI
 from ili934xnew import ILI9341, color565
+
 spi = SPI(2, baudrate=20000000, mosi=Pin(Pin.P20), sck=Pin(Pin.P13))
 tft = ILI9341(spi, cs=Pin(Pin.P16), dc=Pin(Pin.P14), rst=Pin(Pin.P15), led=Pin(Pin.P8, Pin.OUT), w=320, h=240, r=0)
 tft.poweron()  # 默认不开启屏幕，需要手动打开，如果没有连LED不用这句话
