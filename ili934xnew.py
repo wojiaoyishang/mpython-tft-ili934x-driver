@@ -288,53 +288,55 @@ class ILI9341:
         self.blit(fb,x,y,str_w,font.height())
         return x+str_w
 
+    def DispChar(self, s, x, y, color=65535, buffer_char_line=1, buffer_width=None):
+        if buffer_width is None:
+            buffer_width = self.width
 
-    def _DispChar(self, c, color=65535):
-        buf = None
-        x = y = 0
-        str_w = 0
-        data = oled.f.GetCharacterData(c)
-        if data is None:
-            str_w = self.width
-        else:
-            width, bytes_per_line = ustruct.unpack('HH', data[:4])
-            str_w = width
-            buf = bytearray(width * oled.f.height * 2) # 2 bytes per pixel for RGB565
-            fb = framebuf.FrameBuffer(buf, width, oled.f.height, framebuf.RGB565)
+        # Calculate buffer size based on buffer_char_line and buffer_width
+        buffer_height = oled.f.height * buffer_char_line
+        buf = bytearray(buffer_width * buffer_height * 2)  # 2 bytes per pixel for RGB565
+        fb = framebuf.FrameBuffer(buf, buffer_width, buffer_height, framebuf.RGB565)
 
-            for h in range(0, oled.f.height):
-                w = 0
-                i = 0
-                while w < width:
-                    mask = data[4 + h * bytes_per_line + i]
-                    if (width - w) >= 8:
-                        n = 8
-                    else:
-                        n = width - w
-                    py = y + h
-                    page = py >> 3
-                    bit = 0x80 >> (py % 8)
-                    for p in range(0, n):
-                        px = x + w + p
-                        c = 0
-                        if (mask & 0x80) != 0:
-                            c = color
-                        fb.pixel(px, py, c)
-                        mask = mask << 1
-                    w = w + 8
-                    i = i + 1
-        return str_w, fb
-
-    def DispChar(self, s, x, y, color=65535, auto_return=False):
+        # Draw each character onto the buffer, line by line
+        cur_x = 0
+        cur_y = 0
         for c in s:
-            w, fb = self._DispChar(c, color)
-            self.blit(fb, x, y, w, oled.f.height, rgb565=True)
-            x += w
-            if auto_return and x >= self.width:
-                y += oled.f.height
-                x = 0
+            data = oled.f.GetCharacterData(c)
+            if data:
+                width, bytes_per_line = ustruct.unpack('HH', data[:4])
+                if c == " ":
+                    width += 3
+                if cur_x + width > buffer_width:  # Check if we need to wrap to the next line
+                    cur_x = 0
+                    cur_y += oled.f.height
+                    
+                    # Check if we've exceeded the buffer height
+                    if cur_y + oled.f.height > buffer_height:
+                        self.blit(fb, x, y, buffer_width, cur_y, rgb565=True)
+                        y += buffer_height
+                        fb.fill(0)  # Clear the framebuffer
+                        cur_y = 0
 
-            
+                for h in range(0, oled.f.height):
+                    w = 0
+                    i = 0
+                    while w < width:
+                        mask = data[4 + h * bytes_per_line + i]
+                        if (width - w) >= 8:
+                            n = 8
+                        else:
+                            n = width - w
+                        for p in range(0, n):
+                            if (mask & 0x80) != 0:
+                                fb.pixel(cur_x + w + p, cur_y + h, color)
+                            mask = mask << 1
+                        w += 8
+                        i += 1
+                cur_x += width
+
+        # Blit any remaining content in the buffer to the screen
+        self.blit(fb, x, y, buffer_width, cur_y + oled.f.height, rgb565=True)
+                
     def DispBmp(self, bmpr_reader, x, y, framebuf_line=1):
         
         width = bmpr_reader.get_width()
@@ -360,4 +362,5 @@ class ILI9341:
                 line_count = 0
             
             
+
 
