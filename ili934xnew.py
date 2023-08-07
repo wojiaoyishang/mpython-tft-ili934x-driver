@@ -18,7 +18,6 @@
 import time
 import ustruct
 import framebuf
-from machine import SPI
 
 from mpython import *
 
@@ -57,9 +56,7 @@ def color565(r, g, b):
 
 class ILI9341:
 
-    def __init__(self, spi=None, cs=Pin(Pin.P16), dc=Pin(Pin.P14), rst=Pin(Pin.P15), led=Pin(Pin.P8, Pin.OUT), w=320, h=240, r=0):
-        if spi is None:
-            spi = SPI(2, baudrate=20000000, mosi=Pin(Pin.P20), sck=Pin(Pin.P13))
+    def __init__(self, spi, cs=Pin(Pin.P16), dc=Pin(Pin.P14), rst=Pin(Pin.P15), led=Pin(Pin.P8, Pin.OUT), w=320, h=240, r=0):
         self.spi = spi
         self.cs = cs
         self.dc = dc
