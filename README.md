@@ -52,6 +52,7 @@
 
 ```python
 from machine import SPI
+from ili934xnew import ILI9341, color565
 
 spi = SPI(2, baudrate=20000000, mosi=Pin(Pin.P20), sck=Pin(Pin.P13))
 tft = ILI9341(spi, cs=Pin(Pin.P16), dc=Pin(Pin.P14), rst=Pin(Pin.P15), led=Pin(Pin.P8, Pin.OUT), w=320, h=240, r=0)
