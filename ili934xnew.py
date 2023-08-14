@@ -357,7 +357,11 @@ class ILI9341:
                 self.blit(fb, x, y + row_i - framebuf_line, width, framebuf_line, True)
                 fb.fill(0)
                 line_count = 0
+                
+        self.blit(fb, x, y + row_i - line_count, width, framebuf_line, True)
+        del buffer, fb
             
             
+
 
 
