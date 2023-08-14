@@ -108,7 +108,6 @@ tft.blit(fbuf, 20, 40, 50, 50, True)  # 把framebuf贴在屏幕 (20, 40) 的位�
 绘制图片***只支持24位的bmp图片***，准备好图片后，采用开源项目的 [bmp_file_reader](https://github.com/ExcaliburZero/bmp_file_reader) 读取图片。
 
 ```
-import framebuf
 import bmp_file_reader as bmpr
 from ili934xnew import ILI9341, color565
 spi = SPI(2, baudrate=20000000, mosi=Pin(Pin.P20), sck=Pin(Pin.P13))
