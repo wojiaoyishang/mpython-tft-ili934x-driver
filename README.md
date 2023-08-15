@@ -80,6 +80,13 @@ tft.deinit()  # 最后释放，不然软重启会白屏
 
 ***因为掌控板运存比较小，所以对于屏幕比较大的TFT屏幕没有全屏幕缓存区操作，所以此驱动没有 `tft.show()` 方法。DispChar()方法是单字刷新。***
 
+***如果使用了 oled 显示文字，还要显示 tft 屏幕文字，可以用下面的方法刷新。***
+
+```python
+spi.deinit()
+spi.init()
+```
+
 `fill()` 与 `DispChar()` 参考 [https://mpython.readthedocs.io/zh/master/library/mPython/mpython.html?mpython.oled.DispChar#rgb](https://mpython.readthedocs.io/zh/master/library/mPython/mpython.html?mpython.oled.DispChar#rgb)。
 
 **此模块的所有函数，均模仿官方的oled屏幕集成的函数，不同函数使用会说明。**
