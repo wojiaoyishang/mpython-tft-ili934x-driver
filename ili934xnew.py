@@ -79,8 +79,9 @@ class ILI9341:
         self._y = 0
         self.scrolling = False
     
-    def deinit(self):
+    def refresh(self):
         self.spi.deinit()
+        self.spi.init()
     
     def poweron(self):
         self.led.value(1)
