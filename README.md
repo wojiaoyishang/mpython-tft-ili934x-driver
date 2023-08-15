@@ -75,16 +75,15 @@ tft.poweron()  # 默认不开启屏幕，需要手动打开，如果没有连LED
 tft.fill(0)
 tft.DispChar("测试，皮卡丘皮卡丘皮卡丘！！！\nHere some interesting for you.\n" + "长文本" * 100, 0, 0, color565(255, 255, 255), buffer_char_line=1, buffer_width=None)  # buffer_char_line 参数为缓存多少行文字，buffer_width 参数为文字显示区域的宽度，默认为屏幕宽度，会自动换行。
 
-tft.deinit()  # 最后释放，不然软重启会白屏
+spi.deinit()  # 释放总线，不然软重启会白屏
 ```
 
-***因为掌控板运存比较小，所以对于屏幕比较大的TFT屏幕没有全屏幕缓存区操作，所以此驱动没有 `tft.show()` 方法。DispChar()方法是单字刷新。***
+***因为掌控板运存比较小，所以对于屏幕比较大的TFT屏幕没有全屏幕缓存区操作，所以此驱动没有 `tft.show()` 方法。DispChar()方法是逐行刷新。***
 
 ***如果使用了 oled 显示文字，还要显示 tft 屏幕文字，可以用下面的方法刷新 SPI 总线。***
 
 ```python
-spi.deinit()
-spi.init()
+tft.refresh()
 ```
 
 `fill()` 与 `DispChar()` 参考 [https://mpython.readthedocs.io/zh/master/library/mPython/mpython.html?mpython.oled.DispChar#rgb](https://mpython.readthedocs.io/zh/master/library/mPython/mpython.html?mpython.oled.DispChar#rgb)。
