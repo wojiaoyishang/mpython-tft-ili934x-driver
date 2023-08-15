@@ -111,7 +111,7 @@ tft.blit(fbuf, 20, 40, 50, 50, True)  # 把framebuf贴在屏幕 (20, 40) 的位�
 
 ### 绘制图片
 
-绘制图片***只支持24位的bmp图片***，准备好图片后，采用开源项目的 [bmp_file_reader](https://github.com/ExcaliburZero/bmp_file_reader) 读取图片。
+绘制图片***只支持24位的bmp图片***，准备好图片后，采用开源项目的 [bmp_file_reader](https://github.com/ExcaliburZero/bmp_file_reader) 读取图片，项目文件有微微改动。
 
 ```
 import bmp_file_reader as bmpr
@@ -167,4 +167,4 @@ tft_touch = Touch(spi, cs=Pin(Pin.P11), int_pin=Pin(Pin.P2), int_handler=touchsc
 
 ***注意：输出的xy坐标不会完全和显示坐标同一，需要手动在touchscreen_press()处理与调整。***
 
-触摸参考：[https://github.com/rdagger/micropython-ili9341/blob/master/xpt2046.py](https://github.com/rdagger/micropython-ili9341/blob/master/xpt2046.py)
+触摸参考：[https://github.com/rdagger/micropython-ili9341/blob/master/xpt2046.py](https://github.com/rdagger/micropython-ili9341/blob/master/xpt2046.py)，项目文件有微微改动。
