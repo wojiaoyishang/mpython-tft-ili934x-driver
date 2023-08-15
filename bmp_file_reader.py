@@ -190,14 +190,14 @@ class BMPFileReader:
         # Read in the row information from the file
         self.file_handle.seek(row_start)
 
-        row_bytes = list(bytearray(self.file_handle.read(row_size)))
+        row_bytes = bytearray(self.file_handle.read(row_size))
 
         i = 0
         while i < self.get_width():
             start = i * 3
             end = (i + 1) * 3
 
-            yield Color.from_bytes(row_bytes[start:end])
+            yield Color.from_bytes(list(row_bytes[start:end]))
 
             i += 1
 
