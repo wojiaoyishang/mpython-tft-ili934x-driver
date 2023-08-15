@@ -346,9 +346,7 @@ class ILI9341:
         
         for row_i in range(height):
             
-            row = bmpr_reader.get_row(row_i)
-            
-            for col_i, color in enumerate(row):
+            for col_i, color in enumerate(bmpr_reader.get_row_yield(row_i)):
                 fb.pixel(col_i, line_count, color565(color.red, color.green, color.blue))
             
             line_count += 1
