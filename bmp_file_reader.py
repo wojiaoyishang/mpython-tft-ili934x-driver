@@ -149,6 +149,59 @@ class BMPFileReader:
             i += 1
 
         return pixels
+    
+    def get_row_yield(self, row):
+        """
+        Reads in the pixels of the specified row (zero-indexed).
+
+        :param row: The index of the row to read.
+        :type row: int
+        :return: The colors of the pixels in the specified row.
+        :rtype: List[Color]
+        """
+        PIXEL_SIZE_BYTES = 3
+
+        # Check the file info to make sure we support it
+        bits_per_pixel = self.read_dib_header().bits_per_pixel
+        if bits_per_pixel != 24:
+            raise ValueError(
+                "This parser does not currently support BMP files with {} bits per pixel. Currently only 24-bit color values are supported.".format(bits_per_pixel)
+            )
+
+        compression_type = self.read_dib_header().compression_type
+        if compression_type != CompressionType.BI_RGB:
+            raise ValueError(
+                "This parser does not currently support compressed BMP files."
+            )
+
+        # Prepare to start parsing the row
+        height = self.get_height()
+        assert row < height
+
+        row_index = (height - row) - 1
+
+        # Rows are padded out to 4 byte alignment
+        row_size = int(math.ceil((PIXEL_SIZE_BYTES * self.get_width()) / 4.0) * 4)
+
+        row_start = (
+            self.read_bmp_file_header().image_start_offset + row_size * row_index
+        )
+
+        # Read in the row information from the file
+        self.file_handle.seek(row_start)
+
+        row_bytes = list(bytearray(self.file_handle.read(row_size)))
+
+        i = 0
+        while i < self.get_width():
+            start = i * 3
+            end = (i + 1) * 3
+
+            yield Color.from_bytes(row_bytes[start:end])
+
+            i += 1
+
+        return
 
 
 class Color:
@@ -432,3 +485,4 @@ class CompressionType:
     @staticmethod
     def is_compressed(compression_type):
         return compression_type not in [CompressionType.BI_RGB, CompressionType.BI_CMYK]
+
